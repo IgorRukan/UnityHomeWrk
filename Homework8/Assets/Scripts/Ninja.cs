@@ -7,11 +7,12 @@ using UnityEngine;
 public class Ninja : MonoBehaviour
 {
     private Animator walk;
-
     private bool isRight = true;
     private bool isMove = false;
     public GameObject cam;
     public float speed = 0.5f;
+
+    private float temp = 0f;
 
     public Animator Walk
     {
@@ -21,22 +22,21 @@ public class Ninja : MonoBehaviour
     private void Update()
     {
         float horizontal = Input.GetAxis("Horizontal");
-        if (horizontal != 0 && !isMove)
+
+        if (horizontal != 0)
         {
             isMove = true;
             Walk.SetTrigger("Run");
         }
 
         Debug.Log(horizontal);
+
         if (horizontal == 0 && isMove)
         {
-            isMove = false;
             Walk.SetTrigger("Stay");
+            isMove = false;
+            Debug.Log("stay" + temp);
         }
-
-        Vector2 moveInput = new Vector2(horizontal, 0f);
-        Vector2 moveAmount = moveInput.normalized * (speed * Time.deltaTime);
-        cam.transform.position += (Vector3)moveAmount;
 
         if (!isRight && horizontal > 0)
         {
@@ -46,6 +46,10 @@ public class Ninja : MonoBehaviour
         {
             Flip();
         }
+
+        Vector2 moveInput = new Vector2(horizontal, 0f);
+        Vector2 moveAmount = moveInput.normalized * (speed * Time.deltaTime);
+        cam.transform.position += (Vector3)moveAmount;
     }
 
     private void Flip()
